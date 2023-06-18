@@ -34,7 +34,8 @@ const Nearbyjobs = () => {
       error ?<Text>Something went wrnong !</Text> :<FlatList
 
       data={data}
-      renderItem={({item})=>(<NearbyJobCard item={item}               handleNavigate={() => router.push(`/job-details/${job.job_id}`)}
+      renderItem={({item})=>(<NearbyJobCard item={item}      
+               handleNavigate={() => router.push(`/job-details/${item.job_id}`)}
 /> )}
     
       keyExtractor={item=>item?.job_id}

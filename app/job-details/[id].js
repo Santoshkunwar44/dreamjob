@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { ActivityIndicator, RefreshControl, SafeAreaView, ScrollView, View } from 'react-native'
+import React, { useCallback, useState } from 'react'
+import { ActivityIndicator, RefreshControl, SafeAreaView, ScrollView, Text, View } from 'react-native'
 import { COLORS, SIZES, icons } from '../../constants'
 import { Stack, useRouter, useSearchParams } from 'expo-router'
 import { Company, JobAbout, JobFooter, JobTabs, ScreenHeaderBtn, Specifics } from '../../components'
@@ -15,10 +15,15 @@ const JobDetails = () => {
   const router = useRouter()
   const [refreshing,setRefreshing]  = useState(false);
   const [activeTab,setActiveTab] =useState(tabs[0])
-  const onRefresh =()=>{}
   const {data ,reFetch ,loading,error} = useFetch("job-details",{
     job_id:params.id 
   })
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    reFetch()
+    setRefreshing(false)
+  }, []);
+
 
   const displayTabContent=()=>{
     switch (activeTab) {
@@ -37,6 +42,9 @@ const JobDetails = () => {
       points={data[0].job_highlights?.Responsibilities ?? ['N/A']}
 
       />
+
+      default:
+        return null;
     
     }
   }
@@ -51,8 +59,8 @@ const JobDetails = () => {
         headerTitle:"",
         headerShadowVisible:false,
         headerStyle:{backgroundColor:COLORS.white},
-        headerRight:<ScreenHeaderBtn iconUrl={icons.share} dimension={"60%"} handlePress={()=>router.back()}/>,
-        headerLeft:<ScreenHeaderBtn iconUrl={icons.chevronLeft} dimension={"60%"}/>,
+        headerRight:()=><ScreenHeaderBtn iconUrl={icons.share} dimension={"60%"} />,
+        headerLeft:()=><ScreenHeaderBtn iconUrl={icons.chevronLeft} dimension={"60%"}  handlePress={() => router.back()}/>,
       }}
       />
       <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/> }>
@@ -62,6 +70,7 @@ const JobDetails = () => {
           <ActivityIndicator size={"large"} color={COLORS.primary}/>:
           error ? 
           <Text>something went wrong</Text>
+
           :data.length ===0?
           <Text>No data</Text>
           :
@@ -72,7 +81,7 @@ const JobDetails = () => {
               jobTitle={data[0].job_title}
               companyName={data[0].employer_name}
               location={data[0].job_country}
-            />
+            /> 
 
             <JobTabs
             tabs={tabs}
@@ -80,7 +89,7 @@ const JobDetails = () => {
             setActiveTab={setActiveTab}
             />
 
-            {displayTabContent()}
+             {displayTabContent()}
 
 
           </View>

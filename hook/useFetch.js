@@ -6,7 +6,7 @@ export const useFetch=(endpoint,query)=>{
     const [loading,setLoading] =useState(false)
     const [ error,setError] = useState("")
 
-    console.log(rapidApiKey)
+ 
 
     const options = {
   method: 'GET',

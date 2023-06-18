@@ -8,11 +8,11 @@ const Footer = ({url}) => {
   return (
     <View style={styles.container}>
 
-      <TouchableOpacity>
+      <TouchableOpacity style={styles.likeBtn}>
         <Image
         source={icons.heartOutline}
         resizeMode="contain"
-        style={styles.likeBtn}
+        style={styles.likeBtnImage}
         />
       </TouchableOpacity>
       <TouchableOpacity style={styles.applyBtn} onPress={()=>Linking.openURL(url)}>
